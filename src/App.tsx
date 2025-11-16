@@ -1,12 +1,49 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import Registration from "./pages/Registration";
+import Home from "./pages/Home";
+import CreateQuotation from "./pages/CreateQuotation";
+import QuotationHistory from "./pages/QuotationHistory";
+import Analytics from "./pages/Analytics";
+import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
+import BottomNav from "./components/BottomNav";
+import { getCompanyProfile } from "./lib/storage";
 
 const queryClient = new QueryClient();
+
+function AppRoutes() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const profile = getCompanyProfile();
+    if (!profile && location.pathname !== '/') {
+      navigate('/');
+    }
+  }, [location.pathname, navigate]);
+
+  const showBottomNav = location.pathname !== '/' && getCompanyProfile();
+
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Registration />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/create-quotation" element={<CreateQuotation />} />
+        <Route path="/history" element={<QuotationHistory />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      {showBottomNav && <BottomNav />}
+    </>
+  );
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -14,11 +51,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppRoutes />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
