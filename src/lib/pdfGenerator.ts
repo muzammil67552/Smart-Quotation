@@ -34,29 +34,38 @@ export const generatePDF = (
     }
   }
 
-  // Company Logo (top center, smaller)
+  // Friendly Header with Logo and Company Info
   if (companyProfile.logo) {
     try {
-      doc.addImage(companyProfile.logo, 'PNG', pageWidth / 2 - 15, yPos, 30, 30);
-      yPos += 35;
+      doc.addImage(companyProfile.logo, 'PNG', pageWidth / 2 - 20, yPos, 40, 40);
+      yPos += 45;
     } catch (error) {
       console.error('Error adding logo:', error);
       yPos += 5;
     }
   }
 
-  // Company Details
-  doc.setFontSize(18);
+  // Company Name - Larger and more prominent
+  doc.setFontSize(22);
   doc.setFont('helvetica', 'bold');
+  doc.setTextColor(33, 150, 243); // Blue color for company name
   doc.text(companyProfile.companyName, pageWidth / 2, yPos, { align: 'center' });
-  yPos += 8;
+  yPos += 10;
 
+  // Company Contact Info - Friendlier layout
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text(companyProfile.email, pageWidth / 2, yPos, { align: 'center' });
-  yPos += 5;
-  doc.text(companyProfile.contactNumber, pageWidth / 2, yPos, { align: 'center' });
-  yPos += 15;
+  doc.setTextColor(100, 100, 100);
+  doc.text(`📧 ${companyProfile.email}  |  📞 ${companyProfile.contactNumber}`, pageWidth / 2, yPos, { align: 'center' });
+  yPos += 12;
+
+  // Decorative line
+  doc.setDrawColor(33, 150, 243);
+  doc.setLineWidth(0.5);
+  doc.line(40, yPos, pageWidth - 40, yPos);
+  yPos += 10;
+
+  doc.setTextColor(0, 0, 0); // Reset to black for rest of document
 
   // Quotation Title
   doc.setFontSize(16);

@@ -117,9 +117,12 @@ export default function CreateQuotation() {
       termsAndConditions,
     };
 
+    // Save to history automatically
+    saveQuotation(quotation);
+
     const pdf = generatePDF(quotation, companyProfile);
     pdf.save(`Quotation-${quotation.quotationNumber}.pdf`);
-    toast.success('PDF generated successfully!');
+    toast.success('PDF generated and saved to history!');
   };
 
   return (
