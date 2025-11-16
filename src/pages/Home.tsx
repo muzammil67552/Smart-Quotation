@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCompanyProfile, CompanyProfile } from '@/lib/storage';
+import { getCompanyProfile, CompanyProfile, exportData, importData } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Plus, History, Edit, FileText } from 'lucide-react';
+import { Plus, History, Edit, FileText, Download, Upload } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -17,6 +18,52 @@ export default function Home() {
       setProfile(savedProfile);
     }
   }, [navigate]);
+
+  const handleExport = () => {
+    try {
+      const data = exportData();
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `quotation-backup-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toast.success('Data exported successfully!');
+    } catch (error) {
+      toast.error('Failed to export data');
+    }
+  };
+
+  const handleImport = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const jsonString = event.target?.result as string;
+          const success = importData(jsonString);
+          if (success) {
+            toast.success('Data imported successfully!');
+            window.location.reload(); // Reload to show imported data
+          } else {
+            toast.error('Failed to import data');
+          }
+        } catch (error) {
+          toast.error('Invalid backup file');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
 
   if (!profile) return null;
 
@@ -84,6 +131,32 @@ export default function Home() {
             Edit Company Profile
           </Button>
         </div>
+
+        {/* Backup & Restore Section */}
+        <Card className="p-6 mt-6">
+          <h2 className="text-xl font-bold mb-4 text-center">Backup & Restore</h2>
+          <p className="text-sm text-muted-foreground text-center mb-4">
+            Export your data to backup or import from a previous backup file
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              onClick={handleExport}
+              variant="outline"
+              className="h-12"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Export Data
+            </Button>
+            <Button
+              onClick={handleImport}
+              variant="outline"
+              className="h-12"
+            >
+              <Upload className="w-5 h-5 mr-2" />
+              Import Data
+            </Button>
+          </div>
+        </Card>
       </div>
     </div>
   );
