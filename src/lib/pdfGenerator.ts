@@ -37,8 +37,8 @@ export const generatePDF = (
   // Friendly Header with Logo and Company Info
   if (companyProfile.logo) {
     try {
-      doc.addImage(companyProfile.logo, 'PNG', pageWidth / 2 - 20, yPos, 40, 40);
-      yPos += 45;
+      doc.addImage(companyProfile.logo, 'PNG', pageWidth / 2 - 25, yPos, 50, 50);
+      yPos += 55;
     } catch (error) {
       console.error('Error adding logo:', error);
       yPos += 5;
@@ -46,17 +46,22 @@ export const generatePDF = (
   }
 
   // Company Name - Larger and more prominent
-  doc.setFontSize(22);
+  doc.setFontSize(24);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(33, 150, 243); // Blue color for company name
   doc.text(companyProfile.companyName, pageWidth / 2, yPos, { align: 'center' });
-  yPos += 10;
+  yPos += 8;
 
-  // Company Contact Info - Friendlier layout
-  doc.setFontSize(10);
+  // Company Email - Clear and prominent
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(100, 100, 100);
-  doc.text(`📧 ${companyProfile.email}  |  📞 ${companyProfile.contactNumber}`, pageWidth / 2, yPos, { align: 'center' });
+  doc.setTextColor(60, 60, 60);
+  doc.text(`Email: ${companyProfile.email}`, pageWidth / 2, yPos, { align: 'center' });
+  yPos += 6;
+
+  // Company Contact
+  doc.setFontSize(11);
+  doc.text(`Contact: ${companyProfile.contactNumber}`, pageWidth / 2, yPos, { align: 'center' });
   yPos += 12;
 
   // Decorative line
@@ -100,7 +105,9 @@ export const generatePDF = (
   doc.setFont('helvetica', 'bold');
   doc.text('Email:', pageWidth - 80, yPos);
   doc.setFont('helvetica', 'normal');
-  doc.text(quotation.clientEmail, pageWidth - 40, yPos, { align: 'right' });
+  doc.setFontSize(10);
+  const clientEmailText = doc.splitTextToSize(quotation.clientEmail, 60);
+  doc.text(clientEmailText, pageWidth - 40, yPos, { align: 'right' });
   yPos += 12;
 
   // Items Table
