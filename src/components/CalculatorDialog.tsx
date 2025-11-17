@@ -14,6 +14,7 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
   const [prevValue, setPrevValue] = useState<string | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
   const [newNumber, setNewNumber] = useState(true);
+  const [showOperation, setShowOperation] = useState(false);
 
   const handleButtonClick = (value: string) => {
     // Handle AC (Clear)
@@ -22,6 +23,7 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
       setPrevValue(null);
       setOperation(null);
       setNewNumber(true);
+      setShowOperation(false);
       return;
     }
 
@@ -51,6 +53,7 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
       setPrevValue(display);
       setOperation(value);
       setNewNumber(true);
+      setShowOperation(true);
       return;
     }
 
@@ -80,6 +83,7 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
         setPrevValue(null);
         setOperation(null);
         setNewNumber(true);
+        setShowOperation(false);
       }
       return;
     }
@@ -143,6 +147,11 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
                     : 'inset 5px 5px 10px rgba(0, 0, 0, 0.05), inset -5px -5px 10px rgba(255, 255, 255, 0.8)',
               }}
             >
+              {showOperation && operation && (
+                <div className="text-lg font-light mb-2 opacity-70">
+                  {prevValue} {operation}
+                </div>
+              )}
               <div className="text-4xl font-light overflow-hidden text-ellipsis break-all">
                 {display}
               </div>

@@ -78,42 +78,48 @@ export const generatePDF = (
   doc.text('QUOTATION', pageWidth / 2, yPos, { align: 'center' });
   yPos += 10;
 
-  // Quotation Details (Left) and Client Details (Right)
+  // Quotation Details (Right) and Client Details (Left)
   doc.setFontSize(10);
+  
+  // Client details on the left
   doc.setFont('helvetica', 'bold');
-  doc.text('Quotation Number:', 20, yPos);
+  doc.text('Client Name:', 20, yPos);
   doc.setFont('helvetica', 'normal');
-  doc.text(quotation.quotationNumber, 65, yPos);
+  doc.text(quotation.clientName, 50, yPos);
 
+  // Quotation number on the right
   doc.setFont('helvetica', 'bold');
-  doc.text('Client Name:', pageWidth - 80, yPos);
+  doc.text('Quotation Number:', pageWidth - 80, yPos);
   doc.setFont('helvetica', 'normal');
-  doc.text(quotation.clientName, pageWidth - 40, yPos, { align: 'right' });
+  doc.text(quotation.quotationNumber, pageWidth - 20, yPos, { align: 'right' });
   yPos += 6;
 
+  // Client contact on the left
   doc.setFont('helvetica', 'bold');
-  doc.text('Date:', 20, yPos);
+  doc.text('Contact:', 20, yPos);
   doc.setFont('helvetica', 'normal');
-  doc.text(new Date(quotation.date).toLocaleDateString(), 65, yPos);
+  doc.text(quotation.clientContact, 50, yPos);
 
+  // Date on the right
   doc.setFont('helvetica', 'bold');
-  doc.text('Contact:', pageWidth - 80, yPos);
+  doc.text('Date:', pageWidth - 80, yPos);
   doc.setFont('helvetica', 'normal');
-  doc.text(quotation.clientContact, pageWidth - 40, yPos, { align: 'right' });
+  doc.text(new Date(quotation.date).toLocaleDateString(), pageWidth - 20, yPos, { align: 'right' });
   yPos += 6;
 
+  // Client email on the left
   doc.setFont('helvetica', 'bold');
-  doc.text('Email:', pageWidth - 80, yPos);
+  doc.text('Email:', 20, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
-  const clientEmailText = doc.splitTextToSize(quotation.clientEmail, 60);
-  doc.text(clientEmailText, pageWidth - 40, yPos, { align: 'right' });
+  const clientEmailText = doc.splitTextToSize(quotation.clientEmail, 80);
+  doc.text(clientEmailText, 50, yPos);
   yPos += 12;
 
   // Items Table
   const tableStartY = yPos;
   const colWidths = [15, 80, 25, 30, 30];
-  const headers = ['S.No', 'Description', 'Qty', 'Unit Price', 'Total'];
+  const headers = ['S.No', 'Description', 'Qty', 'Unit Price (PKR)', 'Total (PKR)'];
 
   // Table Header
   doc.setFillColor(186 * 255 / 360, 70 * 255 / 100, 45 * 255 / 100);
@@ -148,10 +154,10 @@ export const generatePDF = (
     doc.text(item.quantity.toString(), xPos + 2, yPos + 6);
     xPos += colWidths[2];
     
-    doc.text(`$${item.unitPrice.toFixed(2)}`, xPos + 2, yPos + 6);
+    doc.text(`PKR ${item.unitPrice.toFixed(2)}`, xPos + 2, yPos + 6);
     xPos += colWidths[3];
     
-    doc.text(`$${item.total.toFixed(2)}`, xPos + 2, yPos + 6);
+    doc.text(`PKR ${item.total.toFixed(2)}`, xPos + 2, yPos + 6);
     
     yPos += Math.max(8, description.length * 5);
     doc.line(20, yPos, pageWidth - 20, yPos);
@@ -163,27 +169,27 @@ export const generatePDF = (
   const summaryX = pageWidth - 80;
   doc.setFont('helvetica', 'normal');
   doc.text('Subtotal:', summaryX, yPos);
-  doc.text(`$${quotation.subtotal.toFixed(2)}`, pageWidth - 20, yPos, { align: 'right' });
+  doc.text(`PKR ${quotation.subtotal.toFixed(2)}`, pageWidth - 20, yPos, { align: 'right' });
   yPos += 6;
 
   if (quotation.taxPercent > 0) {
     doc.text(`Tax (${quotation.taxPercent}%):`, summaryX, yPos);
     const taxAmount = (quotation.subtotal * quotation.taxPercent) / 100;
-    doc.text(`$${taxAmount.toFixed(2)}`, pageWidth - 20, yPos, { align: 'right' });
+    doc.text(`PKR ${taxAmount.toFixed(2)}`, pageWidth - 20, yPos, { align: 'right' });
     yPos += 6;
   }
 
   if (quotation.discountPercent > 0) {
     doc.text(`Discount (${quotation.discountPercent}%):`, summaryX, yPos);
     const discountAmount = (quotation.subtotal * quotation.discountPercent) / 100;
-    doc.text(`-$${discountAmount.toFixed(2)}`, pageWidth - 20, yPos, { align: 'right' });
+    doc.text(`-PKR ${discountAmount.toFixed(2)}`, pageWidth - 20, yPos, { align: 'right' });
     yPos += 6;
   }
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
   doc.text('Grand Total:', summaryX, yPos);
-  doc.text(`$${quotation.grandTotal.toFixed(2)}`, pageWidth - 20, yPos, { align: 'right' });
+  doc.text(`PKR ${quotation.grandTotal.toFixed(2)}`, pageWidth - 20, yPos, { align: 'right' });
   yPos += 15;
 
   // Terms and Conditions
