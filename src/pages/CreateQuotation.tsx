@@ -17,7 +17,7 @@ export default function CreateQuotation() {
   const [clientContact, setClientContact] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [items, setItems] = useState<QuotationItem[]>([
-    { id: '1', description: '', quantity: 1, unitPrice: 0, total: 0 },
+    { id: '1', description: '', quantity: 0, unitPrice: 0, total: 0 },
   ]);
   const [taxPercent, setTaxPercent] = useState(0);
   const [discountPercent, setDiscountPercent] = useState(0);
@@ -50,7 +50,7 @@ export default function CreateQuotation() {
 
   const addItem = () => {
     const newId = (Math.max(...items.map(i => parseInt(i.id))) + 1).toString();
-    setItems([...items, { id: newId, description: '', quantity: 1, unitPrice: 0, total: 0 }]);
+    setItems([...items, { id: newId, description: '', quantity: 0, unitPrice: 0, total: 0 }]);
   };
 
   const deleteItem = (id: string) => {
