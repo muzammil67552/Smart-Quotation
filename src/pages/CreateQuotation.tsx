@@ -8,7 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { saveQuotation, generateQuotationNumber, getCompanyProfile, Quotation, QuotationItem } from '@/lib/storage';
 import { generatePDF } from '@/lib/pdfGenerator';
 import { toast } from 'sonner';
-import { Plus, Trash2, Save, FileDown, ArrowLeft } from 'lucide-react';
+import { Plus, Trash2, Save, FileDown, ArrowLeft, Calculator as CalcIcon } from 'lucide-react';
+import { CalculatorDialog } from '@/components/CalculatorDialog';
 
 export default function CreateQuotation() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function CreateQuotation() {
   const [taxPercent, setTaxPercent] = useState(0);
   const [discountPercent, setDiscountPercent] = useState(0);
   const [termsAndConditions, setTermsAndConditions] = useState('Payment due within 30 days. Late payments subject to fees.');
+  const [calculatorOpen, setCalculatorOpen] = useState(false);
 
   const calculateItemTotal = (quantity: number, unitPrice: number) => quantity * unitPrice;
 
@@ -160,52 +162,62 @@ export default function CreateQuotation() {
 
         {/* Items Table */}
         <Card className="mb-6 shadow-soft">
-          <CardHeader className="flex flex-row items-center justify-between">
+          <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
             <CardTitle>Quotation Items</CardTitle>
-            <Button onClick={addItem} size="sm" className="bg-gradient-primary">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Item
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => setCalculatorOpen(true)} size="sm" variant="outline">
+                <CalcIcon className="w-4 h-4 mr-2" />
+                Calculator
+              </Button>
+              <Button onClick={addItem} size="sm" className="bg-gradient-primary">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Item
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {items.map((item, index) => (
-                <div key={item.id} className="grid grid-cols-12 gap-3 items-end p-4 border rounded-lg bg-muted/30">
-                  <div className="col-span-1 text-center font-medium">
-                    {index + 1}
+                <div key={item.id} className="flex flex-col gap-3 p-4 border rounded-lg bg-muted/30">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-medium text-sm">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <Label className="text-xs">Description</Label>
+                      <Input
+                        value={item.description}
+                        onChange={(e) => updateItem(item.id, 'description', e.target.value)}
+                        placeholder="Item description"
+                      />
+                    </div>
                   </div>
-                  <div className="col-span-5">
-                    <Label className="text-xs">Description</Label>
-                    <Input
-                      value={item.description}
-                      onChange={(e) => updateItem(item.id, 'description', e.target.value)}
-                      placeholder="Item description"
-                    />
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <Label className="text-xs">Quantity</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        value={item.quantity}
+                        onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Unit Price</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={item.unitPrice}
+                        onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Total</Label>
+                      <div className="h-10 flex items-center font-bold text-primary">${item.total.toFixed(2)}</div>
+                    </div>
                   </div>
-                  <div className="col-span-2">
-                    <Label className="text-xs">Quantity</Label>
-                    <Input
-                      type="number"
-                      min="1"
-                      value={item.quantity}
-                      onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <Label className="text-xs">Unit Price</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      value={item.unitPrice}
-                      onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div className="col-span-1">
-                    <Label className="text-xs">Total</Label>
-                    <div className="font-bold text-primary">${item.total.toFixed(2)}</div>
-                  </div>
-                  <div className="col-span-1 flex justify-end">
+                  <div className="flex justify-end">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -297,6 +309,8 @@ export default function CreateQuotation() {
           </Button>
         </div>
       </div>
+
+      <CalculatorDialog open={calculatorOpen} onOpenChange={setCalculatorOpen} />
     </div>
   );
 }

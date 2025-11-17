@@ -13,7 +13,7 @@ import EditProfile from "./pages/EditProfile";
 import Calculator from "./pages/Calculator";
 import NotFound from "./pages/NotFound";
 import BottomNav from "./components/BottomNav";
-import { getCompanyProfile } from "./lib/storage";
+import { getCompanyProfile, refreshSession } from "./lib/storage";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +25,9 @@ function AppRoutes() {
     const profile = getCompanyProfile();
     if (!profile && location.pathname !== '/') {
       navigate('/');
+    } else if (profile) {
+      // Refresh session on any activity to extend 24-hour period
+      refreshSession();
     }
   }, [location.pathname, navigate]);
 
