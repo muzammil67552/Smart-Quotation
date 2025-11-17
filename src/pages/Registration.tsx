@@ -8,7 +8,7 @@ import { saveCompanyProfile, CompanyProfile } from '@/lib/storage';
 import { toast } from 'sonner';
 import { Building2, Mail, Phone, Upload, Key } from 'lucide-react';
 
-const VALID_REFERRAL_CODE = 'Mzammil246810';
+const VALID_REFERRAL_CODE = 'Muzammil16070';
 
 export default function Registration() {
   const navigate = useNavigate();
