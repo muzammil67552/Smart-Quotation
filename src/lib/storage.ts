@@ -35,16 +35,47 @@ const STORAGE_KEYS = {
   COMPANY_PROFILE: 'companyProfile',
   QUOTATION_HISTORY: 'quotationHistory',
   LAST_QUOTATION_NUMBER: 'lastQuotationNumber',
+  SESSION_TIMESTAMP: 'sessionTimestamp',
 } as const;
+
+const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Company Profile
 export const saveCompanyProfile = (profile: CompanyProfile): void => {
   localStorage.setItem(STORAGE_KEYS.COMPANY_PROFILE, JSON.stringify(profile));
+  // Set session timestamp when user registers/logs in
+  localStorage.setItem(STORAGE_KEYS.SESSION_TIMESTAMP, Date.now().toString());
 };
 
 export const getCompanyProfile = (): CompanyProfile | null => {
   const data = localStorage.getItem(STORAGE_KEYS.COMPANY_PROFILE);
-  return data ? JSON.parse(data) : null;
+  if (!data) return null;
+
+  // Check if session has expired (24 hours)
+  const sessionTimestamp = localStorage.getItem(STORAGE_KEYS.SESSION_TIMESTAMP);
+  if (sessionTimestamp) {
+    const elapsed = Date.now() - parseInt(sessionTimestamp);
+    if (elapsed > SESSION_DURATION) {
+      // Session expired, clear data
+      clearSession();
+      return null;
+    }
+  }
+
+  return JSON.parse(data);
+};
+
+export const clearSession = (): void => {
+  localStorage.removeItem(STORAGE_KEYS.COMPANY_PROFILE);
+  localStorage.removeItem(STORAGE_KEYS.SESSION_TIMESTAMP);
+};
+
+export const refreshSession = (): void => {
+  // Refresh session timestamp to extend 24-hour period
+  const profile = localStorage.getItem(STORAGE_KEYS.COMPANY_PROFILE);
+  if (profile) {
+    localStorage.setItem(STORAGE_KEYS.SESSION_TIMESTAMP, Date.now().toString());
+  }
 };
 
 // Quotation History
