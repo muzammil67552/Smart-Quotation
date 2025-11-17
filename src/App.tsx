@@ -10,6 +10,7 @@ import CreateQuotation from "./pages/CreateQuotation";
 import QuotationHistory from "./pages/QuotationHistory";
 import Analytics from "./pages/Analytics";
 import EditProfile from "./pages/EditProfile";
+import Calculator from "./pages/Calculator";
 import NotFound from "./pages/NotFound";
 import BottomNav from "./components/BottomNav";
 import { getCompanyProfile } from "./lib/storage";
@@ -38,6 +39,7 @@ function AppRoutes() {
         <Route path="/history" element={<QuotationHistory />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/calculator" element={<Calculator />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {showBottomNav && <BottomNav />}

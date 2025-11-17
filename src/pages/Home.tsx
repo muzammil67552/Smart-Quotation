@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCompanyProfile, CompanyProfile, exportData, importData } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Plus, History, Edit, FileText, Download, Upload } from 'lucide-react';
+import { Plus, History, Edit, FileText, Download, Upload, Calculator } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Home() {
@@ -120,16 +120,25 @@ export default function Home() {
               <FileText className="w-5 h-5 mr-2" />
               Analytics
             </Button>
-          </div>
 
-          <Button
-            onClick={() => navigate('/edit-profile')}
-            variant="secondary"
-            className="h-12"
-          >
-            <Edit className="w-5 h-5 mr-2" />
-            Edit Company Profile
-          </Button>
+            <Button
+              onClick={() => navigate('/calculator')}
+              variant="outline"
+              className="h-14"
+            >
+              <Calculator className="w-5 h-5 mr-2" />
+              Calculator
+            </Button>
+
+            <Button
+              onClick={() => navigate('/edit-profile')}
+              variant="secondary"
+              className="h-14"
+            >
+              <Edit className="w-5 h-5 mr-2" />
+              Edit Profile
+            </Button>
+          </div>
         </div>
 
         {/* Backup & Restore Section */}
