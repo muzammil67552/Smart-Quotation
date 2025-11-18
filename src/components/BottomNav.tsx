@@ -29,7 +29,7 @@ export default function BottomNav() {
                 <Button
                   key={item.path}
                   onClick={() => navigate(item.path)}
-                  className="w-16 h-16 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-medium -mt-8 border-2 border-white/20 hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
+                  className=" w-16 h-16  rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-medium -mt-8 border-2 border-white/20 hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
                   size="icon"
                 >
                   <Icon className="w-7 h-7" />
