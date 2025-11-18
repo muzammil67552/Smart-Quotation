@@ -104,55 +104,63 @@ export default function QuotationHistory() {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      <div className="container max-w-6xl mx-auto p-6">
-        <div className="flex items-center gap-4 mb-6">
+      <div className="container max-w-6xl mx-auto p-3 sm:p-6">
+        <div className="flex items-center gap-2 sm:gap-4 mb-6">
           <Button variant="ghost" size="icon" onClick={() => navigate('/home')}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-3xl font-bold">Quotation History</h1>
+          <h1 className="text-xl sm:text-3xl font-bold">Quotation History</h1>
         </div>
 
         {/* Search and Filter */}
         <Card className="mb-6 shadow-soft">
           <CardContent className="p-4">
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search by client name, quotation number, or email..."
-                  className="pl-10"
+                  className="pl-10 w-full"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Button
                   variant={sortBy === 'newest' ? 'default' : 'outline'}
                   onClick={() => setSortBy('newest')}
                   size="sm"
+                  className="flex-1 sm:flex-none min-w-0"
                 >
-                  Newest
+                  <span className="hidden xs:inline">Newest</span>
+                  <span className="xs:hidden">New</span>
                 </Button>
                 <Button
                   variant={sortBy === 'oldest' ? 'default' : 'outline'}
                   onClick={() => setSortBy('oldest')}
                   size="sm"
+                  className="flex-1 sm:flex-none min-w-0"
                 >
-                  Oldest
+                  <span className="hidden xs:inline">Oldest</span>
+                  <span className="xs:hidden">Old</span>
                 </Button>
                 <Button
                   variant={sortBy === 'highest' ? 'default' : 'outline'}
                   onClick={() => setSortBy('highest')}
                   size="sm"
+                  className="flex-1 sm:flex-none min-w-0"
                 >
-                  Highest
+                  <span className="hidden xs:inline">Highest</span>
+                  <span className="xs:hidden">High</span>
                 </Button>
                 <Button
                   variant={sortBy === 'lowest' ? 'default' : 'outline'}
                   onClick={() => setSortBy('lowest')}
                   size="sm"
+                  className="flex-1 sm:flex-none min-w-0"
                 >
-                  Lowest
+                  <span className="hidden xs:inline">Lowest</span>
+                  <span className="xs:hidden">Low</span>
                 </Button>
               </div>
             </div>
@@ -162,34 +170,34 @@ export default function QuotationHistory() {
         {/* Quotations List */}
         {quotations.length === 0 ? (
           <Card className="shadow-soft">
-            <CardContent className="p-12 text-center">
-              <p className="text-muted-foreground text-lg">No quotations found</p>
+            <CardContent className="p-6 sm:p-12 text-center">
+              <p className="text-muted-foreground text-base sm:text-lg">No quotations found</p>
               <Button onClick={() => navigate('/create-quotation')} className="mt-4 bg-gradient-primary">
                 Create Your First Quotation
               </Button>
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {quotations.map((quotation) => (
               <Card key={quotation.id} className="shadow-soft hover:shadow-medium transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row justify-between gap-4">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex flex-col lg:flex-row justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h3 className="text-xl font-bold">{quotation.clientName}</h3>
-                          <p className="text-sm text-muted-foreground">{quotation.quotationNumber}</p>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-lg sm:text-xl font-bold truncate">{quotation.clientName}</h3>
+                          <p className="text-xs sm:text-sm text-muted-foreground">{quotation.quotationNumber}</p>
                         </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-bold text-primary">PKR {quotation.grandTotal.toFixed(2)}</p>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="text-right ml-4">
+                          <p className="text-lg sm:text-2xl font-bold text-primary">PKR {quotation.grandTotal.toFixed(2)}</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground">
                             {new Date(quotation.date).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
-                      <div className="text-sm text-muted-foreground space-y-1">
-                        <p>Email: {quotation.clientEmail}</p>
+                      <div className="text-xs sm:text-sm text-muted-foreground space-y-1">
+                        <p className="truncate">Email: {quotation.clientEmail}</p>
                         <p>Contact: {quotation.clientContact}</p>
                         <p>Items: {quotation.items.length}</p>
                       </div>
@@ -201,34 +209,41 @@ export default function QuotationHistory() {
                       size="sm"
                       variant="outline"
                       onClick={() => handleDownloadPDF(quotation)}
+                      className="flex-1 sm:flex-none min-w-0"
                     >
-                      <FileDown className="w-4 h-4 mr-2" />
-                      Download
+                      <FileDown className="w-4 h-4 mr-1 sm:mr-2" />
+                      <span className="hidden xs:inline">Download</span>
+                      <span className="xs:hidden">DL</span>
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => handleShare(quotation)}
+                      className="flex-1 sm:flex-none min-w-0"
                     >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share
+                      <Share2 className="w-4 h-4 mr-1 sm:mr-2" />
+                      <span className="hidden xs:inline">Share</span>
+                      <span className="xs:hidden">SH</span>
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => handleDuplicate(quotation)}
+                      className="flex-1 sm:flex-none min-w-0"
                     >
-                      <Copy className="w-4 h-4 mr-2" />
-                      Duplicate
+                      <Copy className="w-4 h-4 mr-1 sm:mr-2" />
+                      <span className="hidden xs:inline">Duplicate</span>
+                      <span className="xs:hidden">CP</span>
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => handleDelete(quotation.id)}
-                      className="text-destructive hover:bg-destructive/10"
+                      className="text-destructive hover:bg-destructive/10 flex-1 sm:flex-none min-w-0"
                     >
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Delete
+                      <Trash2 className="w-4 h-4 mr-1 sm:mr-2" />
+                      <span className="hidden xs:inline">Delete</span>
+                      <span className="xs:hidden">DEL</span>
                     </Button>
                   </div>
                 </CardContent>

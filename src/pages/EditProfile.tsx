@@ -61,30 +61,31 @@ export default function EditProfile() {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      <div className="container max-w-2xl mx-auto p-6">
-        <div className="flex items-center gap-4 mb-6">
+      <div className="container max-w-2xl mx-auto p-3 sm:p-6">
+        <div className="flex items-center gap-2 sm:gap-4 mb-6">
           <Button variant="ghost" size="icon" onClick={() => navigate('/home')}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-3xl font-bold">Edit Company Profile</h1>
+          <h1 className="text-xl sm:text-3xl font-bold">Edit Company Profile</h1>
         </div>
 
         <Card className="shadow-medium">
-          <CardHeader>
-            <CardTitle>Company Information</CardTitle>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-lg sm:text-xl">Company Information</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6 pt-0">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Label>Company Logo</Label>
-                <div className="flex items-center gap-4 mt-2">
+                <div className="flex flex-col sm:flex-row items-start gap-4 mt-2">
                   {logo && (
-                    <img src={logo} alt="Logo" className="w-24 h-24 object-contain rounded-lg border-2 border-border" />
+                    <img src={logo} alt="Logo" className="w-16 h-16 sm:w-24 sm:h-24 object-contain rounded-lg border-2 border-border" />
                   )}
                   <Input
                     type="file"
                     accept="image/jpeg,image/png"
                     onChange={handleLogoUpload}
+                    className="w-full sm:flex-1"
                   />
                 </div>
               </div>
@@ -95,6 +96,7 @@ export default function EditProfile() {
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                   required
+                  className="w-full"
                 />
               </div>
 
@@ -105,6 +107,7 @@ export default function EditProfile() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
+                  className="w-full"
                 />
               </div>
 
@@ -114,6 +117,7 @@ export default function EditProfile() {
                   value={formData.contactNumber}
                   onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
                   required
+                  className="w-full"
                 />
               </div>
 

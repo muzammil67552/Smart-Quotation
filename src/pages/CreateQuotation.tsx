@@ -49,7 +49,7 @@ export default function CreateQuotation() {
   };
 
   const addItem = () => {
-    const newId = (Math.max(...items.map(i => parseInt(i.id))) + 1).toString();
+    const newId = (Math.max(...items.map(i => parseInt(i.id)))+ 1).toString();
     setItems([...items, { id: newId, description: '', quantity: 0, unitPrice: 0, total: 0 }]);
   };
 
@@ -129,12 +129,12 @@ export default function CreateQuotation() {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      <div className="container max-w-4xl mx-auto p-6">
-        <div className="flex items-center gap-4 mb-6">
+      <div className="container max-w-4xl mx-auto p-3 sm:p-6">
+        <div className="flex items-center gap-2 sm:gap-4 mb-6">
           <Button variant="ghost" size="icon" onClick={() => navigate('/home')}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-3xl font-bold">Create Quotation</h1>
+          <h1 className="text-xl sm:text-3xl font-bold">Create Quotation</h1>
         </div>
 
         {/* Client Details */}
@@ -143,18 +143,18 @@ export default function CreateQuotation() {
             <CardTitle>Client Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
                 <Label>Client Name *</Label>
-                <Input value={clientName} onChange={(e) => setClientName(e.target.value)} placeholder="muzammil" />
+                <Input value={clientName} onChange={(e) => setClientName(e.target.value)} placeholder="muzammil" className="w-full" />
               </div>
               <div>
                 <Label>Contact *</Label>
-                <Input value={clientContact} onChange={(e) => setClientContact(e.target.value)} placeholder="+1 234 567 8900" />
+                <Input value={clientContact} onChange={(e) => setClientContact(e.target.value)} placeholder="+1 234 567 8900" className="w-full" />
               </div>
               <div>
                 <Label>Email *</Label>
-                <Input value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} placeholder="muzammil@example.com" type="email" />
+                <Input value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} placeholder="muzammil@example.com" type="email" className="w-full" />
               </div>
             </div>
           </CardContent>
@@ -162,23 +162,25 @@ export default function CreateQuotation() {
 
         {/* Items Table */}
         <Card className="mb-6 shadow-soft">
-          <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
-            <CardTitle>Quotation Items</CardTitle>
-            <div className="flex gap-2">
-              <Button onClick={() => setCalculatorOpen(true)} size="sm" variant="outline">
+          <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <CardTitle className="text-lg sm:text-xl">Quotation Items</CardTitle>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <Button onClick={() => setCalculatorOpen(true)} size="sm" variant="outline" className="w-full sm:w-auto">
                 <CalcIcon className="w-4 h-4 mr-2" />
-                Calculator
+                <span className="hidden xs:inline">Calculator</span>
+                <span className="xs:hidden">Calculator</span>
               </Button>
-              <Button onClick={addItem} size="sm" className="bg-gradient-primary">
+              <Button onClick={addItem} size="sm" className="bg-gradient-primary w-full sm:w-auto">
                 <Plus className="w-4 h-4 mr-2" />
-                Add Item
+                <span className="hidden xs:inline">Add Item</span>
+                <span className="xs:hidden">Add</span>
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {items.map((item, index) => (
-                <div key={item.id} className="flex flex-col gap-3 p-4 border rounded-lg bg-muted/30">
+                <div key={item.id} className="flex flex-col gap-3 p-3 sm:p-4 border rounded-lg bg-muted/30">
                   <div className="flex items-center gap-2">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-medium text-sm">
                       {index + 1}
@@ -189,27 +191,33 @@ export default function CreateQuotation() {
                         value={item.description}
                         onChange={(e) => updateItem(item.id, 'description', e.target.value)}
                         placeholder="Item description"
+                        className="w-full"
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                       <Label className="text-xs">Quantity</Label>
                       <Input
                         type="number"
-                        min=""
-                        value={item.quantity}
-                        onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
+                        min="0"
+                        step="1"
+                        value={item.quantity === 0 ? '' : item.quantity}
+                        onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 0)}
+                        placeholder="0"
+                        className="w-full"
                       />
                     </div>
                     <div>
                       <Label className="text-xs">Unit Price</Label>
                       <Input
                         type="number"
-                        min=""
+                        min="0"
                         step="0.01"
-                        value={item.unitPrice}
-                        onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)} 
+                        value={item.unitPrice === 0 ? '' : item.unitPrice}
+                        onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
+                        placeholder="0.00"
+                        className="w-full"
                       />
                     </div>
                     <div>
@@ -239,7 +247,7 @@ export default function CreateQuotation() {
             <CardTitle>Summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label>Tax %</Label>
                 <Input
@@ -248,6 +256,7 @@ export default function CreateQuotation() {
                   step="0.1"
                   value={taxPercent}
                   onChange={(e) => setTaxPercent(parseFloat(e.target.value) || 0)}
+                  className="w-full"
                 />
               </div>
               <div>
@@ -258,6 +267,7 @@ export default function CreateQuotation() {
                   step="0.1"
                   value={discountPercent}
                   onChange={(e) => setDiscountPercent(parseFloat(e.target.value) || 0)}
+                  className="w-full"
                 />
               </div>
             </div>
@@ -279,7 +289,7 @@ export default function CreateQuotation() {
                   <span>-PKR {((calculateSubtotal() * discountPercent) / 100).toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-xl font-bold pt-2 border-t">
+              <div className="flex justify-between text-lg sm:text-xl font-bold pt-2 border-t">
                 <span>Grand Total:</span>
                 <span className="text-primary">PKR {calculateGrandTotal().toFixed(2)}</span>
               </div>
@@ -292,20 +302,23 @@ export default function CreateQuotation() {
                 onChange={(e) => setTermsAndConditions(e.target.value)}
                 rows={3}
                 placeholder="Enter terms and conditions..."
+                className="w-full"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Actions */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <Button onClick={handleSave} className="h-12 bg-gradient-primary">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Button onClick={handleSave} className="h-12 bg-gradient-primary w-full">
             <Save className="w-5 h-5 mr-2" />
-            Save Quotation
+            <span className="hidden xs:inline">Save Quotation</span>
+            <span className="xs:hidden">Save</span>
           </Button>
-          <Button onClick={handleGeneratePDF} variant="outline" className="h-12">
+          <Button onClick={handleGeneratePDF} variant="outline" className="h-12 w-full">
             <FileDown className="w-5 h-5 mr-2" />
-            Generate PDF
+            <span className="hidden xs:inline">Generate PDF</span>
+            <span className="xs:hidden">PDF</span>
           </Button>
         </div>
       </div>

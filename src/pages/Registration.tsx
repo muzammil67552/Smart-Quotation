@@ -85,16 +85,16 @@ export default function Registration() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-3 sm:p-4">
       <Card className="w-full max-w-md shadow-medium">
-        <CardHeader className="text-center">
-          <div className="mx-auto w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center mb-4">
-            <Building2 className="w-8 h-8 text-primary-foreground" />
+        <CardHeader className="text-center p-4 sm:p-6">
+          <div className="mx-auto w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-primary flex items-center justify-center mb-4">
+            <Building2 className="w-6 h-6 sm:w-8 sm:h-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl">Company Registration</CardTitle>
-          <CardDescription>Enter your business details to get started</CardDescription>
+          <CardTitle className="text-xl sm:text-2xl">Company Registration</CardTitle>
+          <CardDescription className="text-sm sm:text-base">Enter your business details to get started</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-4 sm:p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="companyName">Company Name *</Label>
@@ -103,7 +103,7 @@ export default function Registration() {
                 <Input
                   id="companyName"
                   placeholder="Enter company name"
-                  className="pl-10"
+                  className="pl-10 w-full"
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                   required
@@ -119,7 +119,7 @@ export default function Registration() {
                   id="email"
                   type="email"
                   placeholder="company@example.com"
-                  className="pl-10"
+                  className="pl-10 w-full"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
@@ -134,7 +134,7 @@ export default function Registration() {
                 <Input
                   id="contactNumber"
                   placeholder="+1 234 567 8900"
-                  className="pl-10"
+                  className="pl-10 w-full"
                   value={formData.contactNumber}
                   onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
                   required
@@ -144,17 +144,17 @@ export default function Registration() {
 
             <div className="space-y-2">
               <Label htmlFor="logo">Company Logo * (JPG/PNG, Max 2MB)</Label>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-start gap-3">
                 {logo && (
                   <img src={logo} alt="Logo preview" className="w-16 h-16 object-contain rounded-lg border-2 border-border" />
                 )}
-                <div className="flex-1">
+                <div className="flex-1 w-full">
                   <Input
                     id="logo"
                     type="file"
                     accept="image/jpeg,image/png"
                     onChange={handleLogoUpload}
-                    className="cursor-pointer"
+                    className="cursor-pointer w-full"
                     required
                   />
                 </div>
@@ -168,7 +168,7 @@ export default function Registration() {
                 <Input
                   id="referralCode"
                   placeholder="Enter referral code"
-                  className="pl-10"
+                  className="pl-10 w-full"
                   value={formData.referralCode}
                   onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
                   required
@@ -176,7 +176,7 @@ export default function Registration() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-gradient-primary" disabled={loading}>
+            <Button type="submit" className="w-full bg-gradient-primary h-12" disabled={loading}>
               {loading ? 'Registering...' : 'Complete Registration'}
             </Button>
           </form>
