@@ -146,7 +146,7 @@ export default function CreateQuotation() {
             <div className="grid md:grid-cols-3 gap-4">
               <div>
                 <Label>Client Name *</Label>
-                <Input value={clientName} onChange={(e) => setClientName(e.target.value)} placeholder="John Doe" />
+                <Input value={clientName} onChange={(e) => setClientName(e.target.value)} placeholder="muzammil" />
               </div>
               <div>
                 <Label>Contact *</Label>
@@ -154,7 +154,7 @@ export default function CreateQuotation() {
               </div>
               <div>
                 <Label>Email *</Label>
-                <Input value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} placeholder="client@example.com" type="email" />
+                <Input value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} placeholder="muzammil@example.com" type="email" />
               </div>
             </div>
           </CardContent>
@@ -197,7 +197,7 @@ export default function CreateQuotation() {
                       <Label className="text-xs">Quantity</Label>
                       <Input
                         type="number"
-                        min="1"
+                        min=""
                         value={item.quantity}
                         onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
                       />
@@ -206,15 +206,15 @@ export default function CreateQuotation() {
                       <Label className="text-xs">Unit Price</Label>
                       <Input
                         type="number"
-                        min="0"
+                        min=""
                         step="0.01"
                         value={item.unitPrice}
-                        onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
+                        onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)} 
                       />
                     </div>
                     <div>
                       <Label className="text-xs">Total</Label>
-                      <div className="h-10 flex items-center font-bold text-primary">${item.total.toFixed(2)}</div>
+                      <div className="h-10 flex items-center font-bold text-primary">PKR {item.total.toFixed(2)}</div>
                     </div>
                   </div>
                   <div className="flex justify-end">
@@ -265,23 +265,23 @@ export default function CreateQuotation() {
             <div className="border-t pt-4 space-y-2">
               <div className="flex justify-between text-sm">
                 <span>Subtotal:</span>
-                <span className="font-medium">${calculateSubtotal().toFixed(2)}</span>
+                <span className="font-medium">PKR {calculateSubtotal().toFixed(2)}</span>
               </div>
               {taxPercent > 0 && (
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Tax ({taxPercent}%):</span>
-                  <span>${((calculateSubtotal() * taxPercent) / 100).toFixed(2)}</span>
+                  <span>PKR {((calculateSubtotal() * taxPercent) / 100).toFixed(2)}</span>
                 </div>
               )}
               {discountPercent > 0 && (
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Discount ({discountPercent}%):</span>
-                  <span>-${((calculateSubtotal() * discountPercent) / 100).toFixed(2)}</span>
+                  <span>-PKR {((calculateSubtotal() * discountPercent) / 100).toFixed(2)}</span>
                 </div>
               )}
               <div className="flex justify-between text-xl font-bold pt-2 border-t">
                 <span>Grand Total:</span>
-                <span className="text-primary">${calculateGrandTotal().toFixed(2)}</span>
+                <span className="text-primary">PKR {calculateGrandTotal().toFixed(2)}</span>
               </div>
             </div>
 

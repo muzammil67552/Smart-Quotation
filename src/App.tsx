@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import BottomNav from "./components/BottomNav";
 import { getCompanyProfile, refreshSession } from "./lib/storage";
 
+
 const queryClient = new QueryClient();
 
 function AppRoutes() {

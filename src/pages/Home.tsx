@@ -6,13 +6,15 @@ import { Card } from '@/components/ui/card';
 import { Plus, History, Edit, FileText, Download, Upload, Calculator } from 'lucide-react';
 import { toast } from 'sonner';
 
+
+
 export default function Home() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<CompanyProfile | null>(null);
 
   useEffect(() => {
     const savedProfile = getCompanyProfile();
-    if (!savedProfile) {
+    if (!savedProfile) {    
       navigate('/');
     } else {
       setProfile(savedProfile);

@@ -80,7 +80,7 @@ export default function Analytics() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Total Revenue</p>
-                  <p className="text-3xl font-bold mt-1">${stats.totalRevenue.toFixed(2)}</p>
+                  <p className="text-3xl font-bold mt-1">PKR {stats.totalRevenue.toFixed(2)}</p>
                 </div>
                 <div className="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center">
                   <DollarSign className="w-6 h-6 text-success" />
@@ -94,7 +94,7 @@ export default function Analytics() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Avg Quotation</p>
-                  <p className="text-3xl font-bold mt-1">${stats.avgQuotationValue.toFixed(2)}</p>
+                  <p className="text-3xl font-bold mt-1">PKR {stats.avgQuotationValue.toFixed(2)}</p>
                 </div>
                 <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
                   <TrendingUp className="w-6 h-6 text-accent" />
@@ -129,7 +129,7 @@ export default function Analytics() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-lg">${client.total.toFixed(2)}</p>
+                      <p className="font-bold text-lg">PKR {client.total.toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
@@ -155,7 +155,7 @@ export default function Analytics() {
                       <p className="text-sm text-muted-foreground">{quotation.clientName}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-primary">${quotation.grandTotal.toFixed(2)}</p>
+                      <p className="font-bold text-primary">PKR {quotation.grandTotal.toFixed(2)}</p>
                       <p className="text-xs text-muted-foreground">
                         {new Date(quotation.date).toLocaleDateString()}
                       </p>

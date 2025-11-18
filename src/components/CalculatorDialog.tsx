@@ -17,7 +17,6 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
   const [showOperation, setShowOperation] = useState(false);
 
   const handleButtonClick = (value: string) => {
-    // Handle AC (Clear)
     if (value === 'AC') {
       setDisplay('0');
       setPrevValue(null);
@@ -27,19 +26,16 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
       return;
     }
 
-    // Handle percentage
     if (value === '%') {
       setDisplay((parseFloat(display) / 100).toString());
       return;
     }
 
-    // Handle +/- toggle
     if (value === '±') {
       setDisplay((parseFloat(display) * -1).toString());
       return;
     }
 
-    // Handle decimal point
     if (value === '.') {
       if (!display.includes('.')) {
         setDisplay(display + '.');
@@ -48,7 +44,6 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
       return;
     }
 
-    // Handle operations
     if (['+', '−', '×', '÷'].includes(value)) {
       setPrevValue(display);
       setOperation(value);
@@ -57,7 +52,6 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
       return;
     }
 
-    // Handle equals
     if (value === '=') {
       if (prevValue && operation) {
         const prev = parseFloat(prevValue);
@@ -88,7 +82,6 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
       return;
     }
 
-    // Handle number input
     if (newNumber) {
       setDisplay(value);
       setNewNumber(false);
@@ -120,7 +113,7 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
             </Button>
           </div>
         </DialogHeader>
-        
+
         <div className="px-6 pb-6">
           <div
             className={`rounded-3xl p-6 ${
@@ -135,7 +128,6 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
                   : '0 20px 60px rgba(0, 0, 0, 0.1)',
             }}
           >
-            {/* Display */}
             <div
               className={`mb-6 p-6 rounded-2xl text-right ${
                 theme === 'dark' ? 'text-white' : 'text-slate-800'
@@ -157,7 +149,6 @@ export function CalculatorDialog({ open, onOpenChange }: CalculatorDialogProps) 
               </div>
             </div>
 
-            {/* Buttons Grid */}
             <div className="space-y-3">
               {buttons.map((row, rowIndex) => (
                 <div key={rowIndex} className="grid grid-cols-4 gap-3">
