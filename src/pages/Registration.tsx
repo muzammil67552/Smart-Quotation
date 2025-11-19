@@ -8,7 +8,7 @@ import { saveCompanyProfile, CompanyProfile } from '@/lib/storage';
 import { toast } from 'sonner';
 import { Building2, Mail, Phone, Upload, Key } from 'lucide-react';
 
-const VALID_REFERRAL_CODE = 'Muzammil16070';
+const VALID_REFERRAL_CODE = 'Muzammil1122';
 
 export default function Registration() {
   const navigate = useNavigate();
@@ -143,7 +143,7 @@ export default function Registration() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="logo">Company Logo * (JPG/PNG, Max 2MB)</Label>
+              <Label htmlFor="logo">Company Logo * (JPG/PNG, Max 2MB) white background logo</Label>
               <div className="flex flex-col sm:flex-row items-start gap-3">
                 {logo && (
                   <img src={logo} alt="Logo preview" className="w-16 h-16 object-contain rounded-lg border-2 border-border" />
@@ -152,6 +152,7 @@ export default function Registration() {
                   <Input
                     id="logo"
                     type="file"
+                    placeholder="for better looking use white background logo"
                     accept="image/jpeg,image/png"
                     onChange={handleLogoUpload}
                     className="cursor-pointer w-full"

@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getCompanyProfile, CompanyProfile, exportData, importData } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Plus, History, Edit, FileText, Download, Upload, Calculator } from 'lucide-react';
+import { Plus, History, Edit, FileText, Download, Upload, Calculator as CalcIcon,} from 'lucide-react';
+import { CalculatorDialog } from '@/components/CalculatorDialog';
 import { toast } from 'sonner';
 
 
@@ -11,6 +12,7 @@ import { toast } from 'sonner';
 export default function Home() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<CompanyProfile | null>(null);
+  const [calculatorOpen, setCalculatorOpen] = useState(false);
 
   useEffect(() => {
     const savedProfile = getCompanyProfile();
@@ -127,11 +129,11 @@ export default function Home() {
             </Button>
 
             <Button
-              onClick={() => navigate('/calculator')}
+              onClick={() => setCalculatorOpen(true)}
               variant="outline"
               className="h-12 sm:h-14 w-full"
             >
-              <Calculator className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+              <CalcIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               <span className="hidden xs:inline">Calculator</span>
               <span className="xs:hidden">Calculator</span>
             </Button>
@@ -176,6 +178,8 @@ export default function Home() {
           </div>
         </Card>
       </div>
+
+      <CalculatorDialog open={calculatorOpen} onOpenChange={setCalculatorOpen} />
     </div>
   );
 }
