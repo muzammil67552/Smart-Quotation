@@ -1,6 +1,46 @@
 import jsPDF from 'jspdf';
 import { CompanyProfile, Quotation } from './storage';
 
+/**
+ * Share a PDF file using the Web Share API
+ * @param pdfBlob - The PDF blob to share
+ * @param fileName - The name of the file to share
+ * @returns Promise that resolves when sharing is complete or rejects if sharing fails
+ */
+export const shareQuotation = async (pdfBlob: Blob, fileName: string): Promise<void> => {
+  // Check if Web Share API is supported
+  if (!navigator.share) {
+    throw new Error('Web Share API is not supported in this browser');
+  }
+
+  // Check if the browser can share files
+  if (!navigator.canShare) {
+    throw new Error('File sharing is not supported in this browser');
+  }
+
+  // Create a File object from the Blob
+  const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+  // Check if we can share this file
+  if (!navigator.canShare({ files: [file] })) {
+    throw new Error('This file type cannot be shared');
+  }
+
+  try {
+    await navigator.share({
+      files: [file],
+      title: 'Quotation PDF',
+      text: 'Please find the quotation attached.',
+    });
+  } catch (error: any) {
+    // User cancelled the share or an error occurred
+    if (error.name === 'AbortError') {
+      throw new Error('Share cancelled');
+    }
+    throw error;
+  }
+};
+
 export const generatePDF = (
   quotation: Quotation,
   companyProfile: CompanyProfile

@@ -6,9 +6,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { saveQuotation, generateQuotationNumber, getCompanyProfile, Quotation, QuotationItem } from '@/lib/storage';
-import { generatePDF } from '@/lib/pdfGenerator';
+import { generatePDF, shareQuotation } from '@/lib/pdfGenerator';
 import { toast } from 'sonner';
-import { Plus, Trash2, Save, FileDown, ArrowLeft, Calculator as CalcIcon } from 'lucide-react';
+import { Plus, Trash2, Save, FileDown, ArrowLeft, Calculator as CalcIcon, Share2 } from 'lucide-react';
 import { CalculatorDialog } from '@/components/CalculatorDialog';
 
 export default function CreateQuotation() {
@@ -23,6 +23,7 @@ export default function CreateQuotation() {
   const [discountPercent, setDiscountPercent] = useState(0);
   const [termsAndConditions, setTermsAndConditions] = useState('Payment due within 30 days. Late payments subject to fees.');
   const [calculatorOpen, setCalculatorOpen] = useState(false);
+  const [lastGeneratedPDF, setLastGeneratedPDF] = useState<{ blob: Blob; fileName: string } | null>(null);
 
   const calculateItemTotal = (quantity: number, unitPrice: number) => quantity * unitPrice;
 
@@ -92,7 +93,7 @@ export default function CreateQuotation() {
     navigate('/history');
   };
 
-  const handleGeneratePDF = () => {
+  const handleGeneratePDF = async () => {
     if (!clientName || !clientContact || !clientEmail) {
       toast.error('Please fill all client details');
       return;
@@ -123,8 +124,51 @@ export default function CreateQuotation() {
     saveQuotation(quotation);
 
     const pdf = generatePDF(quotation, companyProfile);
-    pdf.save(`Quotation-${quotation.quotationNumber}.pdf`);
+    const fileName = `Quotation-${quotation.quotationNumber}.pdf`;
+    
+    // Convert PDF to Blob
+    const pdfBlob = pdf.output('blob');
+    
+    // Store the PDF blob for later sharing
+    setLastGeneratedPDF({ blob: pdfBlob, fileName });
+    
+    // Save the PDF file
+    pdf.save(fileName);
     toast.success('PDF generated and saved to history!');
+    
+    // Automatically trigger share dialog
+    try {
+      await shareQuotation(pdfBlob, fileName);
+    } catch (error: any) {
+      // Only show error if it's not a user cancellation
+      if (error.message !== 'Share cancelled') {
+        console.error('Share error:', error);
+        // Don't show error toast for unsupported browsers, just silently fail
+        if (!error.message.includes('not supported')) {
+          toast.error('Failed to share PDF: ' + error.message);
+        }
+      }
+    }
+  };
+
+  const handleSharePDF = async () => {
+    if (!lastGeneratedPDF) {
+      toast.error('Please generate the PDF first');
+      return;
+    }
+
+    try {
+      await shareQuotation(lastGeneratedPDF.blob, lastGeneratedPDF.fileName);
+    } catch (error: any) {
+      if (error.message !== 'Share cancelled') {
+        console.error('Share error:', error);
+        if (error.message.includes('not supported')) {
+          toast.error('Web Share API is not supported in this browser. Please use a mobile device or compatible browser.');
+        } else {
+          toast.error('Failed to share PDF: ' + error.message);
+        }
+      }
+    }
   };
 
   return (
@@ -309,7 +353,7 @@ export default function CreateQuotation() {
         </Card>
 
         {/* Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Button onClick={handleSave} className="h-12 bg-gradient-primary w-full">
             <Save className="w-5 h-5 mr-2" />
             <span className="hidden xs:inline">Save Quotation</span>
@@ -319,6 +363,16 @@ export default function CreateQuotation() {
             <FileDown className="w-5 h-5 mr-2" />
             <span className="hidden xs:inline">Generate PDF</span>
             <span className="xs:hidden">PDF</span>
+          </Button>
+          <Button
+            onClick={handleSharePDF}
+            variant="outline"
+            className="h-12 w-full"
+            disabled={!lastGeneratedPDF}
+          >
+            <Share2 className="w-5 h-5 mr-2" />
+            <span className="hidden xs:inline">Share PDF</span>
+            <span className="xs:hidden">Share</span>
           </Button>
         </div>
       </div>
